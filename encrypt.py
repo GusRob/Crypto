@@ -3,18 +3,31 @@ import re
 
 #print(str(sys.argv))
 
-def encryptCaesar():
-    return ""
-def encryptDES():
-    return ""
-def encrypt3DES():
-    return ""
-def encryptAES():
-    return ""
-def encryptRSA():
-    return ""
-def encryptECC():
-    return ""
+def encryptCaesar(plain):
+    return plain
+def encryptDES(plain):
+    return plain
+def encrypt3DES(plain):
+    return plain
+def encryptAES(plain):
+    return plain
+def encryptRSA(plain):
+    return plain
+def encryptECC(plain):
+    return plain
+
+
+def isValidText(s):
+    result = True
+    for i in s:
+        if not isValidChar(i):
+            result = False
+    return result
+
+def isValidChar(c):
+    return (32 <= ord(c)) and (126 >= ord(c))
+
+
 
 options = {
     1:"Caesar",  #symmetric
@@ -58,35 +71,28 @@ print("\nPlease enter a string to encrypt")
 #get user input for string to encrypt
 valid = False
 while not valid:
-    response = input("\n>> ")
-    if re.match("^[A-z,.?!(); ]*$", response) and len(response) < 100:
+    plaintext = input("\n>> ")
+    if len(plaintext) < 100 and isValidText(plaintext):
         valid = True
     else:
-        print("\nPlease enter a string using only the letters A-Z and ,.?!(); less than 100 charactrs in length")
+        print("\nPlease enter a string using only the letters A-Z and ,.?!(); less than 100 charactrs in length\n")
 
-#clean user input
-for i in response:
-    val = ord(i)
-    if val >= 97 and val <= 122:
-        plaintext +=  chr(val-32)
-    elif val >= 65 and val <= 90:
-        plaintext += i
-print("\nPlaintext: " + plaintext)
+print("\nPlaintext:\n" + plaintext + "\n")
 
 #select/call encryption algorithm
 output = ""
 if(encryption == 1):
-    output = encryptCaesar()
+    output = encryptCaesar(plaintext)
 elif(encryption == 2):
-    output = encryptDES()
+    output = encryptDES(plaintext)
 elif(encryption == 3):
-    output = encrypt3DES()
+    output = encrypt3DES(plaintext)
 elif(encryption == 4):
-    output = encryptAES()
+    output = encryptAES(plaintext)
 elif(encryption == 5):
-    output = encryptRSA()
+    output = encryptRSA(plaintext)
 elif(encryption == 6):
-    output = encryptECC()
+    output = encryptECC(plaintext)
 ciphertext = output
 
-print("Ciphertext:\n" + ciphertext)
+print("Ciphertext:\n" + ciphertext + "\n")
