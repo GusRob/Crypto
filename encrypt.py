@@ -1,31 +1,14 @@
 import sys
 import re
 
-#print(str(sys.argv))
-
-def encryptCaesar(plain):
-    key = 0
+def encryptCaesar(plain, key):
     cipher = ""
-    #prompt user for key value
-    print("\nPlease input your key")
-
-    #get user input for encryption method
-    valid = False
-    while not valid:
-        response = input("\n>> ")
-        print()
-        try:
-            key = int(response)
-            valid = True
-        except ValueError:
-            print("Please enter a number")
-    print("You have chosen " + str(key) + " as your key")
 
     for i in plain:
         oldVal = ord(i)
         newVal = (key + oldVal)
         if(newVal >= 126):
-            newVal = newVal - 95
+            newVal = newVal - 94
         cipher = cipher + chr( newVal )
     return cipher
 def encryptDES(plain):
@@ -51,6 +34,65 @@ def isValidChar(c):
     return (32 <= ord(c)) and (126 >= ord(c))
 
 
+def reqEncryption():
+    encryption = ""
+    plaintext = ""
+    #prompt user for encryption method
+    print("\nPlease select an encryption algorithm")
+    print("\n[", end="")
+    for n in options.keys():
+        print(str(n)+ " : " + options[n], end=" | " if n != len(options) else "")
+    print("]")
+
+    #get user input for encryption method
+    valid = False
+    while not valid:
+        response = input("\n>> ")
+        print()
+        try:
+            userChoice = int(response)
+            if userChoice <= len(options) and userChoice >= 1:
+                encryption = userChoice
+                valid = True
+            else:
+                raise ValueError()
+        except ValueError:
+            print("Please enter a number (1-" + str(len(options)) + "):")
+    print("You have chosen " + str(encryption) + ": " + options[encryption])
+
+
+    #prompt user input, ask for string to encrpyt
+    print("\nPlease enter a string to encrypt")
+
+    #get user input for string to encrypt
+    valid = False
+    while not valid:
+        plaintext = input("\n>> ")
+        if len(plaintext) < 100 and isValidText(plaintext):
+            valid = True
+        else:
+            print("\nPlease enter a string using only the letters A-Z and ,.?!(); less than 100 charactrs in length\n")
+
+    print("\nPlaintext:\n" + plaintext + "\n")
+
+    #prompt user for key value
+    print("\nPlease input your key")
+
+    #get user input for key value
+    valid = False
+    while not valid:
+        response = input("\n>> ")
+        print()
+        try:
+            key = int(response)
+            valid = True
+        except ValueError:
+            print("Please enter a number")
+    print("You have chosen " + str(key) + " as your key")
+
+    return encryption, plaintext, key
+
+
 
 options = {
     1:"Caesar",  #symmetric
@@ -63,49 +105,40 @@ options = {
 encryption = 1
 plaintext = ""
 ciphertext = ""
+key = 0
 
-#prompt user for encryption method
-print("\nPlease select an encryption algorithm")
-print("\n[", end="")
-for n in options.keys():
-    print(str(n)+ " : " + options[n], end=" | " if n != len(options) else "")
-print("]")
+#print(str(sys.argv))
 
-#get user input for encryption method
-valid = False
-while not valid:
-    response = input("\n>> ")
-    print()
+args = sys.argv
+
+if len(args) < 2:
+    encryption, plaintext, key = reqEncryption()
+else:
+
     try:
-        userChoice = int(response)
-        if userChoice <= len(options) and userChoice >= 1:
-            encryption = userChoice
-            valid = True
-        else:
+        encryption = int(args[1])
+        key = int(args[2])
+        if not (encryption <= len(options) and encryption >= 1):
             raise ValueError()
     except ValueError:
-        print("Please enter a number (1-" + str(len(options)) + "):")
-print("You have chosen " + str(encryption) + ": " + options[encryption])
+        print("\nInput should be of the form:\n\tpython encrypt.py [ENCRYPTION] [KEY] [PLAINTEXT]")
+        print("\nEncryption Algorithms Available: ")
+        print("\n[", end="")
+        for n in options.keys():
+            print(str(n)+ " : " + options[n], end=" | " if n != len(options) else "")
+        print("]")
+        print("\nENCRYPTION and KEY should be integer values\n")
+        sys.exit()
+    args.pop(0)
+    args.pop(0)
+    args.pop(0)
 
-
-#prompt user input, ask for string to encrpyt
-print("\nPlease enter a string to encrypt")
-
-#get user input for string to encrypt
-valid = False
-while not valid:
-    plaintext = input("\n>> ")
-    if len(plaintext) < 100 and isValidText(plaintext):
-        valid = True
-    else:
-        print("\nPlease enter a string using only the letters A-Z and ,.?!(); less than 100 charactrs in length\n")
-
-print("\nPlaintext:\n" + plaintext + "\n")
+    plaintext = " ".join(args)
 
 #select/call encryption algorithm
 output = ""
 if(encryption == 1):
-    output = encryptCaesar(plaintext)
+    output = encryptCaesar(plaintext, key)
 elif(encryption == 2):
     output = encryptDES(plaintext)
 elif(encryption == 3):
