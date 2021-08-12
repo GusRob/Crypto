@@ -1,28 +1,28 @@
 import sys
 import re
 
-def encryptCaesar(plain, key):
-    cipher = ""
+def decryptCaesar(cipher, key):
+    plain = ""
 
-    for i in plain:
+    for i in cipher:
         oldVal = ord(i)
-        newVal = (key + oldVal)
+        newVal = (-key + oldVal)
         while(newVal >= 127):
             newVal = newVal - 95
         while(newVal <= 31):
             newVal = newVal + 95
-        cipher = cipher + chr( newVal )
+        plain = plain + chr( newVal )
+    return plain
+def decryptDES(cipher):
     return cipher
-def encryptDES(plain):
-    return plain
-def encrypt3DES(plain):
-    return plain
-def encryptAES(plain):
-    return plain
-def encryptRSA(plain):
-    return plain
-def encryptECC(plain):
-    return plain
+def decrypt3DES(cipher):
+    return cipher
+def decryptAES(cipher):
+    return cipher
+def decryptRSA(cipher):
+    return cipher
+def decryptECC(cipher):
+    return cipher
 
 
 def isValidText(s):
@@ -36,17 +36,17 @@ def isValidChar(c):
     return (32 <= ord(c)) and (126 >= ord(c))
 
 
-def reqEncryption():
-    encryption = ""
+def reqDecryption():
+    decryption = ""
     plaintext = ""
-    #prompt user for encryption method
-    print("\nPlease select an encryption algorithm")
+    #prompt user for decryption method
+    print("\nPlease select a decryption algorithm")
     print("\n[", end="")
     for n in options.keys():
         print(str(n)+ " : " + options[n], end=" | " if n != len(options) else "")
     print("]")
 
-    #get user input for encryption method
+    #get user input for decryption method
     valid = False
     while not valid:
         response = input("\n>> ")
@@ -54,28 +54,28 @@ def reqEncryption():
         try:
             userChoice = int(response)
             if userChoice <= len(options) and userChoice >= 1:
-                encryption = userChoice
+                decryption = userChoice
                 valid = True
             else:
                 raise ValueError()
         except ValueError:
             print("Please enter a number (1-" + str(len(options)) + "):")
-    print("You have chosen " + str(encryption) + ": " + options[encryption])
+    print("You have chosen " + str(decryption) + ": " + options[decryption])
 
 
     #prompt user input, ask for string to encrpyt
-    print("\nPlease enter a string to encrypt")
+    print("\nPlease enter a string to decrypt")
 
-    #get user input for string to encrypt
+    #get user input for string to decrypt
     valid = False
     while not valid:
-        plaintext = input("\n>> ")
-        if len(plaintext) < 100 and isValidText(plaintext):
+        ciphertext = input("\n>> ")
+        if len(ciphertext) < 100 and isValidText(ciphertext):
             valid = True
         else:
             print("\nPlease enter a string using only the letters A-Z and ,.?!(); less than 100 charactrs in length\n")
 
-    print("\nPlaintext:\n" + plaintext + "\n")
+    print("\nPlaintext:\n" + ciphertext + "\n")
 
     #prompt user for key value
     print("\nPlease input your key")
@@ -92,7 +92,7 @@ def reqEncryption():
             print("Please enter a number")
     print("You have chosen " + str(key) + " as your key")
 
-    return encryption, plaintext, key
+    return decryption, ciphertext, key
 
 
 
@@ -104,60 +104,56 @@ options = {
     5:"RSA",     #asymmetric
     6:"ECC",     #
 }
-encryption = 1
+decryption = 1
 plaintext = ""
 ciphertext = ""
 key = 0
 
-print(str(sys.argv))
+#print(str(sys.argv))
 
 args = sys.argv
 
 if len(args) < 2:
 
-    encryption, plaintext, key = reqEncryption() #Make specific requests for each option
+    decryption, ciphertext, key = reqDecryption() #Make specific requests for each option
 
 else:
 
     try:
-        encryption = int(args[1])
+        decryption = int(args[1])
         key = int(args[2])
-        if not (encryption <= len(options) and encryption >= 1):
+        if not (decryption <= len(options) and decryption >= 1):
             raise ValueError()
     except ValueError:
-        print("\nInput should be of the form:\n\tpython encrypt.py [ENCRYPTION] [KEY] '[PLAINTEXT]'")
-        print("\nEncryption Algorithms Available: ")
+        print("\nInput should be of the form:\n\tpython decrypt.py [ENCRYPTION] [KEY] [PLAINTEXT]")
+        print("\nDecryption Algorithms Available: ")
         print("\n[", end="")
         for n in options.keys():
             print(str(n)+ " : " + options[n], end=" | " if n != len(options) else "")
         print("]")
         print("\nENCRYPTION and KEY should be integer values\n")
-        print("\nEnsure you use single quotes ('') for PLAINTEXT to avoid terminal misreading\n")
         sys.exit()
     args.pop(0)
     args.pop(0)
     args.pop(0)
 
-    plaintext = " ".join(args)
+    ciphertext = " ".join(args)
 
-#select/call encryption algorithm
+#select/call decryption algorithm
 output = ""
-if(encryption == 1):
-    output = encryptCaesar(plaintext, key)
-elif(encryption == 2):
-    output = encryptDES(plaintext)
-elif(encryption == 3):
-    output = encrypt3DES(plaintext)
-elif(encryption == 4):
-    output = encryptAES(plaintext)
-elif(encryption == 5):
-    output = encryptRSA(plaintext)
-elif(encryption == 6):
-    output = encryptECC(plaintext)
-ciphertext = output
+if(decryption == 1):
+    output = decryptCaesar(ciphertext, key)
+elif(decryption == 2):
+    output = decryptDES(ciphertext)
+elif(decryption == 3):
+    output = decrypt3DES(ciphertext)
+elif(decryption == 4):
+    output = decryptAES(ciphertext)
+elif(decryption == 5):
+    output = decryptRSA(ciphertext)
+elif(decryption == 6):
+    output = decryptECC(ciphertext)
+plaintext = output
 
-print("\nPlaintext:\n" + plaintext + "\n")
-print("Ciphertext:\n" + ciphertext + "\n")
-
-#for i in range(130):
-#    print(chr(i))
+print("\nCiphertext:\n" + ciphertext + "\n")
+print("Plaintext:\n" + plaintext + "\n")
