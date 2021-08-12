@@ -4,7 +4,30 @@ import re
 #print(str(sys.argv))
 
 def encryptCaesar(plain):
-    return plain
+    key = 0
+    cipher = ""
+    #prompt user for key value
+    print("\nPlease input your key")
+
+    #get user input for encryption method
+    valid = False
+    while not valid:
+        response = input("\n>> ")
+        print()
+        try:
+            key = int(response)
+            valid = True
+        except ValueError:
+            print("Please enter a number")
+    print("You have chosen " + str(key) + " as your key")
+
+    for i in plain:
+        oldVal = ord(i)
+        newVal = (key + oldVal)
+        if(newVal >= 126):
+            newVal = newVal - 95
+        cipher = cipher + chr( newVal )
+    return cipher
 def encryptDES(plain):
     return plain
 def encrypt3DES(plain):
@@ -95,4 +118,5 @@ elif(encryption == 6):
     output = encryptECC(plaintext)
 ciphertext = output
 
+print("\nPlaintext:\n" + plaintext + "\n")
 print("Ciphertext:\n" + ciphertext + "\n")
