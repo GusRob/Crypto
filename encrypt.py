@@ -57,21 +57,7 @@ def desKeyComb(R, Kn):
 
     return output
 
-def encryptCaesar(plain, key):
-    cipher = ""
-
-    for i in plain:
-        oldVal = ord(i)
-        newVal = (key + oldVal)
-        while(newVal >= 127):
-            newVal = newVal - 95
-        while(newVal <= 31):
-            newVal = newVal + 95
-        cipher = cipher + chr( newVal )
-    return cipher
-def encryptDES(plain, keyAsHexStr):
-    #STEP 1: Generate subkeys
-
+def desGenKeys(key):
     keyAsDecInt = int(key, 16)
     keyAsBinStr = bin(keyAsDecInt)
     K = keyAsBinStr[2:].zfill(64)
@@ -88,14 +74,8 @@ def encryptDES(plain, keyAsHexStr):
     for i in PC_1:
         K_Plus = K_Plus + K[i-1]
 
-    #print((K))
-    #print((K_Plus))
-
     C = [K_Plus[:28]]
     D = [K_Plus[28:]]
-    #print((C))
-    #print((D))
-    #print(leftShiftBin(D))
 
     shifts = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
 
@@ -103,67 +83,72 @@ def encryptDES(plain, keyAsHexStr):
         C.append(leftShiftBin(C[i]) if shifts[i] == 1 else leftShiftBin(leftShiftBin(C[i])))
         D.append(leftShiftBin(D[i]) if shifts[i] == 1 else leftShiftBin(leftShiftBin(D[i])))
 
-    #print(str(C))
-    #print(str(D))
-
     CD = [C[i] + D[i] for i in range(17)]
-
-    #print(len(CD))
 
     for i in range(16):
         subK_Plus.append("")
         for j in PC_2:
             subK_Plus[i] = subK_Plus[i] + CD[i+1][j-1]
 
-    #print(subK_Plus)
+    #SubK_Plus is the resultant key list
+    return subK_Plus
 
-    #STEP 2: Encode data 64 bits at a time
-
+def desSingleSegEncrypt(M, subK_Plus):
     IP_Mat = [58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4,     62, 54, 46, 38, 30, 22, 14, 6, 64, 56, 48, 40, 32, 24, 16, 8,
         57, 49, 41, 33, 25, 17, 9, 1, 59, 51, 43, 35, 27, 19, 11, 3,        61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31, 23, 15, 7]
 
     PI_1 = [40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31,   38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29,
         36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27,       34, 2, 42, 10, 50, 18, 58, 26, 33, 1, 41, 9, 49, 17, 57, 25]
+    IP = ""
 
-    #NEEDS CORRECTING
+    for i in IP_Mat:
+        IP = IP + str(M[i-1])
+
+    #print(IP)
+
+    L = [IP[:32]]
+    R = [IP[32:]]
+
+    for i in range(16):
+        L.append(R[i])
+        R.append(bin(int(L[i], 2)^int(desKeyComb(R[i], subK_Plus[i]), 2))[2:].zfill(32))
+
+    RL = R[16] + L[16]
+
+    cipherAsBinStr = ""
+    for i in PI_1:
+        cipherAsBinStr = cipherAsBinStr + RL[i-1]
+    cipherAsDecInt = int(cipherAsBinStr, 2)
+    cipherAsHexStr = hex(cipherAsDecInt)[2:]
+    return cipherAsHexStr
+
+def encryptCaesar(plain, key):
+    cipher = ""
+
+    for i in plain:
+        oldVal = ord(i)
+        newVal = (key + oldVal)
+        while(newVal >= 127):
+            newVal = newVal - 95
+        while(newVal <= 31):
+            newVal = newVal + 95
+        cipher = cipher + chr( newVal )
+    return cipher
+def encryptDES(plain, keyAsHexStr):
+    #STEP 1: Generate subkeys
+    subK_Plus = desGenKeys(key)
+
+    #STEP 2: Encode data 64 bits at a time
     plainAsHexStr = plain.encode("utf-8").hex()
     plainAsDecInt = int(plainAsHexStr, 16)
     plainAsBinStr = bin(plainAsDecInt)[2:]
     length = 64 * math.ceil(len(plainAsBinStr)/64)
     plainAsBinStr = plainAsBinStr.zfill(length)
-    #print(plainAsBinStr)
-
     plainAsBinStrSegments = textwrap.wrap(plainAsBinStr, 64)
 
-    #print(plainAsBinStrSegments)
-
     result = ""
-
     for seg in plainAsBinStrSegments:
-        M = seg
-        IP = ""
-
-        for i in IP_Mat:
-            IP = IP + str(M[i-1])
-
-        #print(IP)
-
-        L = [IP[:32]]
-        R = [IP[32:]]
-
-        for i in range(16):
-            L.append(R[i])
-            R.append(bin(int(L[i], 2)^int(desKeyComb(R[i], subK_Plus[i]), 2))[2:].zfill(32))
-
-        RL = R[16] + L[16]
-
-        cipherAsBinStr = ""
-        for i in PI_1:
-            cipherAsBinStr = cipherAsBinStr + RL[i-1]
-
-        cipherAsDecInt = int(cipherAsBinStr, 2)
-        cipherAsHexStr = hex(cipherAsDecInt)[2:]
-        result = result + cipherAsHexStr
+        result = result + desSingleSegEncrypt(seg, subK_Plus)
     return result
 def encrypt3DES(plain):
     return plain
