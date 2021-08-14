@@ -14,7 +14,7 @@ Algorithm | Symmetry | Completed
  :---:|:---:|:---: 
 **Caesar** | Symmetric |  <ul><li>- [X] </li></ul>
 **DES** | Symmetric |  <ul><li>- [X] </li></ul>
-**3DES** | Symmetric |  <ul><li>- [ ] </li></ul>
+**3DES** | Symmetric |  <ul><li>- [X] </li></ul>
 **AES** | Symmetric |  <ul><li>- [ ] </li></ul>
 **RSA** | Asymmetric |  <ul><li>- [ ] </li></ul>
 **ECC** | Asymmetric |  <ul><li>- [ ] </li></ul>
@@ -47,3 +47,13 @@ Algorithm | Symmetry | Completed
   * Caesar cipher has been implemented in both encrypting and decrypting
   * DES encryption and encryption works
   * DES de/encryption only accepts keys of 64 bits, as is the standard for storing DES keys
+
+2021/08/14
+  * 3DES implemented with 2 and 3 key variations
+  * DES encryption correction made as key variable name caused mismatched useage
+    * Was not a problem for DES encryption as the key variable was constant throughout program
+    * 3DES implementation calls the DES Encryption algorithm multiple times with different keys so made the error apparent
+  * Todo:
+    * Create AES encryption and decryption
+    * Test program on larger strings of text (e.g. whole paragraphs)
+    * Test user input to only allow plaintext with single quotes surrounding
