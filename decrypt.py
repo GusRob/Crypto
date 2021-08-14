@@ -94,7 +94,7 @@ def desGenKeys(key):
     #SubK_Plus is the resultant key list
     return subK_Plus
 
-def desSingleSegDecrypt(M, subK_Plus):
+def desSingleSegDecrypt(M, subK_Plus, isDecrypt):
     IP_Mat = [58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4,     62, 54, 46, 38, 30, 22, 14, 6, 64, 56, 48, 40, 32, 24, 16, 8,
         57, 49, 41, 33, 25, 17, 9, 1, 59, 51, 43, 35, 27, 19, 11, 3,        61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31, 23, 15, 7]
 
@@ -112,7 +112,7 @@ def desSingleSegDecrypt(M, subK_Plus):
 
     for i in range(16):
         L.append(R[i])
-        R.append(bin(int(L[i], 2)^int(desKeyComb(R[i], subK_Plus[15-i]), 2))[2:].zfill(32))
+        R.append(bin(int(L[i], 2)^int(desKeyComb(R[i], subK_Plus[15-i if isDecrypt else i]), 2))[2:].zfill(32))
 
     RL = R[16] + L[16]
 
@@ -136,7 +136,8 @@ def decryptCaesar(cipher, key):
             newVal = newVal + 95
         plain = plain + chr( newVal )
     return plain
-def decryptDES(cipher, key):
+
+def decryptDES(cipher, key, isDecrypt, isHexOutput):
     #Step 1: generate subkeys
     subK_Plus = desGenKeys(key)
 
@@ -149,13 +150,24 @@ def decryptDES(cipher, key):
 
     resultHex = ""
     for seg in cipherAsBinStrSegments:
-        resultHex = resultHex + desSingleSegDecrypt(seg, subK_Plus)
+        resultHex = resultHex + desSingleSegDecrypt(seg, subK_Plus, isDecrypt)
 
-    result = str(binascii.unhexlify(resultHex))[2:-1]
+    result = str(binascii.unhexlify(resultHex))[2:-1] if not isHexOutput else resultHex
 
     return result
-def decrypt3DES(cipher):
-    return cipher
+def decrypt3DES(cipher, key):
+    keys = textwrap.wrap(key, 16)
+
+    result = ""
+    if(len(keys) == 2):
+        result = decryptDES(cipher, keys[0], True, True)
+        result = decryptDES(result, keys[1], False, True)
+        result = decryptDES(result, keys[1], True, False)
+    else:
+        result = decryptDES(cipher, keys[0], True, True)
+        result = decryptDES(result, keys[1], True, True)
+        result = decryptDES(result, keys[2], True, False)
+    return result
 def decryptAES(cipher):
     return cipher
 def decryptRSA(cipher):
@@ -266,6 +278,10 @@ else:
             key = args[2]
             if(not len(key) == 16):
                 raise ValueError()
+        elif(decryption == 3):
+            key = args[2]
+            if(not len(key) == 48 and not len(key) == 32):
+                raise ValueError()
         else:
             key = args[2]
         if not (decryption <= len(options) and decryption >= 1):
@@ -292,9 +308,9 @@ output = ""
 if(decryption == 1):
     output = decryptCaesar(ciphertext, key)
 elif(decryption == 2):
-    output = decryptDES(ciphertext, key)
+    output = decryptDES(ciphertext, key, True, False)
 elif(decryption == 3):
-    output = decrypt3DES(ciphertext)
+    output = decrypt3DES(ciphertext, key)
 elif(decryption == 4):
     output = decryptAES(ciphertext)
 elif(decryption == 5):
