@@ -2,8 +2,8 @@
 Practicing Encryption/Decryption Algorithms
 
 ## This repository will consist of a self project in which i will attempt to:
-  *  - [ ] Create a program that can encrypt sentences with basic algorithms
-  *  - [ ] Create a program that can decrypt sentences with basic algorithms
+  *  - [X] Create a program that can encrypt sentences with basic algorithms
+  *  - [X] Create a program that can decrypt sentences with basic algorithms
   *  - [ ] Improve the encryption program to more advanced algorithms
   *  - [ ] Improve the decryption program to more advanced algorithms
   *  - [ ] Develop a key-sharing algorithm implementation?
@@ -13,7 +13,7 @@ Practicing Encryption/Decryption Algorithms
 Algorithm | Symmetry | Completed
  :---:|:---:|:---: 
 **Caesar** | Symmetric |  <ul><li>- [X] </li></ul>
-**DES** | Symmetric |  <ul><li>- [ ] </li></ul>
+**DES** | Symmetric |  <ul><li>- [X] </li></ul>
 **3DES** | Symmetric |  <ul><li>- [ ] </li></ul>
 **AES** | Symmetric |  <ul><li>- [ ] </li></ul>
 **RSA** | Asymmetric |  <ul><li>- [ ] </li></ul>
@@ -42,3 +42,8 @@ Algorithm | Symmetry | Completed
   * Todo:
     * Find out how to make sure the plaintext input is surrounded by single quotes, and request the user re-enters their command if so
     * Write an encryption and decryption algorithm to implement DES encryption
+
+2021/08/13
+  * Caesar cipher has been implemented in both encrypting and decrypting
+  * DES encryption and encryption works
+  * DES de/encryption only accepts keys of 64 bits, as is the standard for storing DES keys
