@@ -58,8 +58,8 @@ def desKeyComb(R, Kn):
 
     return output
 
-def desGenKeys(key):
-    keyAsDecInt = int(key, 16)
+def desGenKeys(keyIn):
+    keyAsDecInt = int(keyIn, 16)
     keyAsBinStr = bin(keyAsDecInt)
     K = keyAsBinStr[2:].zfill(64)
     K_Plus = ""
@@ -124,12 +124,12 @@ def desSingleSegDecrypt(M, subK_Plus, isDecrypt):
     return cipherAsHexStr
 
 
-def decryptCaesar(cipher, key):
+def decryptCaesar(cipher, keyIn):
     plain = ""
 
     for i in cipher:
         oldVal = ord(i)
-        newVal = (-key + oldVal)
+        newVal = (-keyIn + oldVal)
         while(newVal >= 127):
             newVal = newVal - 95
         while(newVal <= 31):
@@ -137,9 +137,9 @@ def decryptCaesar(cipher, key):
         plain = plain + chr( newVal )
     return plain
 
-def decryptDES(cipher, key, isDecrypt, isHexOutput):
+def decryptDES(cipher, keyAsHexStr, isDecrypt, isHexOutput):
     #Step 1: generate subkeys
-    subK_Plus = desGenKeys(key)
+    subK_Plus = desGenKeys(keyAsHexStr)
 
     #Step 2: Decode Data 64 bits at a time
     cipherAsDecInt = int(cipher, 16)
@@ -155,8 +155,8 @@ def decryptDES(cipher, key, isDecrypt, isHexOutput):
     result = str(binascii.unhexlify(resultHex))[2:-1] if not isHexOutput else resultHex
 
     return result
-def decrypt3DES(cipher, key):
-    keys = textwrap.wrap(key, 16)
+def decrypt3DES(cipher, keyIn):
+    keys = textwrap.wrap(keyIn, 16)
 
     result = ""
     if(len(keys) == 2):
