@@ -121,7 +121,9 @@ def desSingleSegDecrypt(M, subK_Plus, isDecrypt):
         cipherAsBinStr = cipherAsBinStr + RL[i-1]
     cipherAsDecInt = int(cipherAsBinStr, 2)
     cipherAsHexStr = hex(cipherAsDecInt)[2:]
-    return cipherAsHexStr
+    length = round(len(cipherAsHexStr)/2)*2
+
+    return cipherAsHexStr.zfill(length)
 
 
 def decryptCaesar(cipher, keyIn):
@@ -153,7 +155,6 @@ def decryptDES(cipher, keyAsHexStr, isDecrypt, isHexOutput):
         resultHex = resultHex + desSingleSegDecrypt(seg, subK_Plus, isDecrypt)
 
     result = str(binascii.unhexlify(resultHex))[2:-1] if not isHexOutput else resultHex
-
     return result
 def decrypt3DES(cipher, keyIn):
     keys = textwrap.wrap(keyIn, 16)

@@ -122,7 +122,8 @@ def desSingleSegEncrypt(M, subK_Plus, isEncrypt):
         cipherAsBinStr = cipherAsBinStr + RL[i-1]
     cipherAsDecInt = int(cipherAsBinStr, 2)
     cipherAsHexStr = hex(cipherAsDecInt)[2:]
-    return cipherAsHexStr
+    length = round(len(cipherAsHexStr)/2)*2
+    return cipherAsHexStr.zfill(length)
 
 def encryptCaesar(plain, keyIn):
     cipher = ""
