@@ -11,7 +11,7 @@ Practicing Encryption/Decryption Algorithms
 ## Bot List
 
 Algorithm | Symmetry | Completed
- :---:|:---:|:---: 
+ :---:|:---:|:---:
 **Caesar** | Symmetric |  <ul><li>- [X] </li></ul>
 **DES** | Symmetric |  <ul><li>- [X] </li></ul>
 **3DES** | Symmetric |  <ul><li>- [X] </li></ul>
@@ -47,13 +47,15 @@ Algorithm | Symmetry | Completed
   * Caesar cipher has been implemented in both encrypting and decrypting
   * DES encryption and encryption works
   * DES de/encryption only accepts keys of 64 bits, as is the standard for storing DES keys
+  * http://page.math.tu-berlin.de/~kant/teaching/hess/krypto-ws2006/des.htm used for structure
 
 2021/08/14
   * 3DES implemented with 2 and 3 key variations
-  * DES encryption correction made as key variable name caused mismatched useage
+  * DES encryption correction made as key variable name caused mismatched usage
     * Was not a problem for DES encryption as the key variable was constant throughout program
     * 3DES implementation calls the DES Encryption algorithm multiple times with different keys so made the error apparent
   * Todo:
     * Create AES encryption and decryption
+      * https://csrc.nist.gov/csrc/media/publications/fips/197/final/documents/fips-197.pdf could be used
     * Test program on larger strings of text (e.g. whole paragraphs)
     * Test user input to only allow plaintext with single quotes surrounding
