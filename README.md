@@ -71,4 +71,6 @@ Algorithm | Symmetry | Completed
       * `[KEYLEN]` is a multiple of 8
       * `[KEYBASE]` is one of `2`, `8`, `10` or `16`
       * The `[KEYBASE]` argument is optional, will default to 16
+  * The secrets.py module is used as opposed to the random.py module
+  * The secrets library function used is `secrets.token_hex([nbytes=None])` as this generates a random text string in hexadecimal format
 
