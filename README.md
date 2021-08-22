@@ -59,3 +59,16 @@ Algorithm | Symmetry | Completed
       * https://csrc.nist.gov/csrc/media/publications/fips/197/final/documents/fips-197.pdf could be used
     * Test program on larger strings of text (e.g. whole paragraphs)
     * Test user input to only allow plaintext with single quotes surrounding
+
+2021/08/14
+  * Simple pseudo-random key generation implemented
+  * Should be useful for more in depth testing of the encryption algorithms
+  * Usage is as follows:
+    * `python key.py [KEYLEN] [KEYBASE]`
+    * Where:
+      * Both `[KEYLEN]` and `[KEYBASE]` are integer values
+      * `[KEYLEN]` is in bits
+      * `[KEYLEN]` is a multiple of 8
+      * `[KEYBASE]` is one of `2`, `8`, `10` or `16`
+      * The '[KEYBASE]` argument is optional, will default to 16
+
