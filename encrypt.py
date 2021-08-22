@@ -129,7 +129,7 @@ def aesGenKeys(keyIn):
         temp = w[i-1]
         if i % Nk == 0:
             temp = subWord(rotWord(temp)) ^ Rcon[i/Nk]
-        else if (Nk > 6 and i mod Nk = 4):
+        elif (Nk > 6 and i % Nk == 4):
             temp = subWord(temp)
             w[i] = w[i-Nk] ^ temp
     return w
