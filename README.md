@@ -70,5 +70,5 @@ Algorithm | Symmetry | Completed
       * `[KEYLEN]` is in bits
       * `[KEYLEN]` is a multiple of 8
       * `[KEYBASE]` is one of `2`, `8`, `10` or `16`
-      * The '[KEYBASE]` argument is optional, will default to 16
+      * The `[KEYBASE]` argument is optional, will default to 16
 
