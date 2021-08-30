@@ -36,14 +36,14 @@ Practicing Encryption/Decryption Algorithms
 
 ## Bot List
 
-Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : chars)
+Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex chars)
  :---:|:---:|:---:|:---:|:---:|:---:
 **Caesar** | Symmetric |  <ul><li>- [X] </li></ul> | 1 | Decimal | INT_MAX
 **DES** | Symmetric |  <ul><li>- [X] </li></ul> | 2 | Hexadecimal | 64 : 16
-**3DES** | Symmetric |  <ul><li>- [X] </li></ul> | 3 | Hexadecimal | 128 : 32 OR 192 : 48
-**AES** | Symmetric |  <ul><li>- [ ] </li></ul> | 4 | Hexadecimal | 128 : 32
-**RSA** | Asymmetric |  <ul><li>- [ ] </li></ul> | N/A | N/A | N/A
-**ECC** | Asymmetric |  <ul><li>- [ ] </li></ul> | N/A | N/A | N/A
+**3DES** | Symmetric |  <ul><li>- [X] </li></ul> | 3 | Hexadecimal | 128 : 32 or 192 : 48
+**AES** | Symmetric |  <ul><li>- [ ] </li></ul> | 4 | Hexadecimal | 128 : 32 or 192 : 48 or 256 : 64
+**RSA** | Asymmetric |  <ul><li>- [ ] </li></ul> | 5 | N/A | N/A
+**ECC** | Asymmetric |  <ul><li>- [ ] </li></ul> | 6 | N/A | N/A
 
 ## Milestone Log
 
