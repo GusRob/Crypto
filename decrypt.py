@@ -126,7 +126,6 @@ def desSingleSegDecrypt(M, subK_Plus, isDecrypt):
 
     return cipherAsHexStr.zfill(length)
 
-
 def decryptCaesar(cipher, keyIn):
     plain = ""
 
