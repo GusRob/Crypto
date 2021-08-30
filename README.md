@@ -99,3 +99,10 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
       * The `[KEYBASE]` argument is optional, will default to 16
   * The secrets.py module is used as opposed to the random.py module
   * The secrets library function used is `secrets.token_hex([nbytes=None])` as this generates a random text string in hexadecimal format
+
+2021/08/30
+  * Skeleton code for functions of AES implementation added
+  * Main AES loop calling encryption functions implemented
+  * Included a timer library to time completion of encryption/decryption functions
+    * Included to allow for potential cracking of encrypted ciphertext without key
+    * (I have no intention for this currently, but it may prove useful to test encryption implementations too)
