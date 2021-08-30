@@ -137,43 +137,76 @@ def aesGenStateReverse(stateIn):
 
     return segOut
 
-def aesGenKeys(keyIn):
-    Nk = len(keyIn)/32
-    Nr = Nk + 6
-    w = []
+def aesSubWord(word):
+    aes_S_BOX = [
+        ["63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"],["ca", "82", "c9", "7d", "fa", "59", "47", "f0", "ad", "d4", "a2", "af", "9c", "a4", "72", "c0"],
+        ["b7", "fd", "93", "26", "36", "3f", "f7", "cc", "34", "a5", "e5", "f1", "71", "d8", "31", "15"],["04", "c7", "23", "c3", "18", "96", "05", "9a", "07", "12", "80", "e2", "eb", "27", "b2", "75"],
+        ["09", "83", "2c", "1a", "1b", "6e", "5a", "a0", "52", "3b", "d6", "b3", "29", "e3", "2f", "84"],["53", "d1", "00", "ed", "20", "fc", "b1", "5b", "6a", "cb", "be", "39", "4a", "4c", "58", "cf"],
+        ["d0", "ef", "aa", "fb", "43", "4d", "33", "85", "45", "f9", "02", "7f", "50", "3c", "9f", "a8"],["51", "a3", "40", "8f", "92", "9d", "38", "f5", "bc", "b6", "da", "21", "10", "ff", "f3", "d2"],
+        ["cd", "0c", "13", "ec", "5f", "97", "44", "17", "c4", "a7", "7e", "3d", "64", "5d", "19", "73"],["60", "81", "4f", "dc", "22", "2a", "90", "88", "46", "ee", "b8", "14", "de", "5e", "0b", "db"],
+        ["e0", "32", "3a", "0a", "49", "06", "24", "5c", "c2", "d3", "ac", "62", "91", "95", "e4", "79"],["e7", "c8", "37", "6d", "8d", "d5", "4e", "a9", "6c", "56", "f4", "ea", "65", "7a", "ae", "08"],
+        ["ba", "78", "25", "2e", "1c", "a6", "b4", "c6", "e8", "dd", "74", "1f", "4b", "bd", "8b", "8a"],["70", "3e", "b5", "66", "48", "03", "f6", "0e", "61", "35", "57", "b9", "86", "c1", "1d", "9e"],
+        ["e1", "f8", "98", "11", "69", "d9", "8e", "94", "9b", "1e", "87", "e9", "ce", "55", "28", "df"],["8c", "a1", "89", "0d", "bf", "e6", "42", "68", "41", "99", "2d", "0f", "b0", "54", "bb", "16"]
+    ]
+    output = ""
+    for i in range(4):
+        iByte = word[8*i:8*(i+1)]
+        row = int(iByte[:4], 2)
+        col = int(iByte[4:], 2)
+        output = output + bin(int(aes_S_BOX[row][col], 16))[2:].zfill(8)
+    return output
+
+def aesRotWord(word):
+    return word[8:] + word[:8]
+
+def aesGenKeys(keyIn, NbNkNr):
+    Nb = NbNkNr[0]
+    Nk = NbNkNr[1]
+    Nr = NbNkNr[2]
+
+    keyAsDecInt = int(keyIn, 16)
+    keyAsBinStr = bin(keyAsDecInt)[2:].zfill(Nk*32)
+    keyAsBinStrOfBytes = textwrap.wrap(keyAsBinStr, 8)
+
+    w = ["" for i in range(Nb*(Nr+1))]
+
+    r_con = (
+    0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40,
+    0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A,
+    0x2F, 0x5E, 0xBC, 0x63, 0xC6, 0x97, 0x35, 0x6A,
+    0xD4, 0xB3, 0x7D, 0xFA, 0xEF, 0xC5, 0x91, 0x39,
+    )
 
     for i in range(Nk):
-        w.append(keyIn[4*i] + keyIn[(4*i)+1] + keyIn[(4*i)+2] + keyIn[(4*i)+3])
+        w[i] = (keyAsBinStrOfBytes[4*i] + keyAsBinStrOfBytes[(4*i)+1] + keyAsBinStrOfBytes[(4*i)+2] + keyAsBinStrOfBytes[(4*i)+3])
 
-    for i in range(4*Nr+1):
+    for i in range(Nb*(Nr+1)):
         if i < Nk:
             i = Nk
         temp = w[i-1]
         if i % Nk == 0:
-            temp = subWord(rotWord(temp)) ^ Rcon[i/Nk]
+            temp = aesSubWord(aesRotWord(temp))
+            tempFirstByte = bin(int(temp[:8], 2)^r_con[int(i/Nk)])[2:].zfill(8)
+            temp = tempFirstByte + temp[8:]
         elif (Nk > 6 and i % Nk == 4):
-            temp = subWord(temp)
-            w[i] = w[i-Nk] ^ temp
+            temp = aesSubWord(temp)
+        w[i] = bin(int(w[i-Nk], 2) ^ int(temp, 2))[2:].zfill(8*Nb)
+
+    print([hex(int(wi, 2)) for wi in w])
+    print(hex(int(w[43], 2)))
+    print(len(w))
     return w
 
 def aesSubBytes(stateIn):
     aes_S_BOX = [
-        ["63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"],
-        ["ca", "82", "c9", "7d", "fa", "59", "47", "f0", "ad", "d4", "a2", "af", "9c", "a4", "72", "c0"],
-        ["b7", "fd", "93", "26", "36", "3f", "f7", "cc", "34", "a5", "e5", "f1", "71", "d8", "31", "15"],
-        ["04", "c7", "23", "c3", "18", "96", "05", "9a", "07", "12", "80", "e2", "eb", "27", "b2", "75"],
-        ["09", "83", "2c", "1a", "1b", "6e", "5a", "a0", "52", "3b", "d6", "b3", "29", "e3", "2f", "84"],
-        ["53", "d1", "00", "ed", "20", "fc", "b1", "5b", "6a", "cb", "be", "39", "4a", "4c", "58", "cf"],
-        ["d0", "ef", "aa", "fb", "43", "4d", "33", "85", "45", "f9", "02", "7f", "50", "3c", "9f", "a8"],
-        ["51", "a3", "40", "8f", "92", "9d", "38", "f5", "bc", "b6", "da", "21", "10", "ff", "f3", "d2"],
-        ["cd", "0c", "13", "ec", "5f", "97", "44", "17", "c4", "a7", "7e", "3d", "64", "5d", "19", "73"],
-        ["60", "81", "4f", "dc", "22", "2a", "90", "88", "46", "ee", "b8", "14", "de", "5e", "0b", "db"],
-        ["e0", "32", "3a", "0a", "49", "06", "24", "5c", "c2", "d3", "ac", "62", "91", "95", "e4", "79"],
-        ["e7", "c8", "37", "6d", "8d", "d5", "4e", "a9", "6c", "56", "f4", "ea", "65", "7a", "ae", "08"],
-        ["ba", "78", "25", "2e", "1c", "a6", "b4", "c6", "e8", "dd", "74", "1f", "4b", "bd", "8b", "8a"],
-        ["70", "3e", "b5", "66", "48", "03", "f6", "0e", "61", "35", "57", "b9", "86", "c1", "1d", "9e"],
-        ["e1", "f8", "98", "11", "69", "d9", "8e", "94", "9b", "1e", "87", "e9", "ce", "55", "28", "df"],
-        ["8c", "a1", "89", "0d", "bf", "e6", "42", "68", "41", "99", "2d", "0f", "b0", "54", "bb", "16"]
+        ["63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"],["ca", "82", "c9", "7d", "fa", "59", "47", "f0", "ad", "d4", "a2", "af", "9c", "a4", "72", "c0"],
+        ["b7", "fd", "93", "26", "36", "3f", "f7", "cc", "34", "a5", "e5", "f1", "71", "d8", "31", "15"],["04", "c7", "23", "c3", "18", "96", "05", "9a", "07", "12", "80", "e2", "eb", "27", "b2", "75"],
+        ["09", "83", "2c", "1a", "1b", "6e", "5a", "a0", "52", "3b", "d6", "b3", "29", "e3", "2f", "84"],["53", "d1", "00", "ed", "20", "fc", "b1", "5b", "6a", "cb", "be", "39", "4a", "4c", "58", "cf"],
+        ["d0", "ef", "aa", "fb", "43", "4d", "33", "85", "45", "f9", "02", "7f", "50", "3c", "9f", "a8"],["51", "a3", "40", "8f", "92", "9d", "38", "f5", "bc", "b6", "da", "21", "10", "ff", "f3", "d2"],
+        ["cd", "0c", "13", "ec", "5f", "97", "44", "17", "c4", "a7", "7e", "3d", "64", "5d", "19", "73"],["60", "81", "4f", "dc", "22", "2a", "90", "88", "46", "ee", "b8", "14", "de", "5e", "0b", "db"],
+        ["e0", "32", "3a", "0a", "49", "06", "24", "5c", "c2", "d3", "ac", "62", "91", "95", "e4", "79"],["e7", "c8", "37", "6d", "8d", "d5", "4e", "a9", "6c", "56", "f4", "ea", "65", "7a", "ae", "08"],
+        ["ba", "78", "25", "2e", "1c", "a6", "b4", "c6", "e8", "dd", "74", "1f", "4b", "bd", "8b", "8a"],["70", "3e", "b5", "66", "48", "03", "f6", "0e", "61", "35", "57", "b9", "86", "c1", "1d", "9e"],
+        ["e1", "f8", "98", "11", "69", "d9", "8e", "94", "9b", "1e", "87", "e9", "ce", "55", "28", "df"],["8c", "a1", "89", "0d", "bf", "e6", "42", "68", "41", "99", "2d", "0f", "b0", "54", "bb", "16"]
     ]
     stateOut = [[stateIn[x][y] for x in range(4)] for y in range(4)]
     for x in range(4):
@@ -277,10 +310,11 @@ def encrypt3DES(plain, keyIn):
 
 def encryptAES(plain, keyIn):
     Nb = 4                      #No. of 32 bit words comprising the state
-    Nk = len(keyIn)/32          #No. of 32 bit words comprising the key
+    Nk = int(len(keyIn)/8)          #No. of 32 bit words comprising the key
     Nr = 10 if Nk == 4 else (12 if Nk == 6 else 14) #No. of rounds
 
     #Step 1: generate subkeys
+    subkeys = aesGenKeys(keyIn, (Nb, Nk, Nr))
 
     #Step 2: enode data 128 bits at a time
     plainAsHexStr = plain.encode("utf-8").hex()
@@ -293,7 +327,7 @@ def encryptAES(plain, keyIn):
     result = ""
     for seg in plainAsBinStrSegments:
         plainState = aesGenState(seg)
-        cipherState = aesSingleSegEncrypt(plainState, key, (Nb, Nk, Nr))
+        cipherState = aesSingleSegEncrypt(plainState, subKeys, (Nb, Nk, Nr))
         result = result + aesGenStateReverse(cipherState)
 
 
