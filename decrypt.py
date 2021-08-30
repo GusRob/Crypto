@@ -3,6 +3,7 @@ import re
 import textwrap
 import math
 import binascii
+import time
 
 def leftShiftBin(inp):
     out = ""
@@ -156,6 +157,7 @@ def decryptDES(cipher, keyAsHexStr, isDecrypt, isHexOutput):
 
     result = str(binascii.unhexlify(resultHex))[2:-1] if not isHexOutput else resultHex
     return result
+
 def decrypt3DES(cipher, keyIn):
     keys = textwrap.wrap(keyIn, 16)
 
@@ -169,14 +171,16 @@ def decrypt3DES(cipher, keyIn):
         result = decryptDES(result, keys[1], True, True)
         result = decryptDES(result, keys[2], True, False)
     return result
+
 def decryptAES(cipher, keyIn):
 
     return cipher
+
 def decryptRSA(cipher):
     return cipher
+
 def decryptECC(cipher):
     return cipher
-
 
 def isValidText(s):
     result = True
@@ -187,7 +191,6 @@ def isValidText(s):
 
 def isValidChar(c):
     return (32 <= ord(c)) and (126 >= ord(c))
-
 
 def reqDecryption():
     decryption = ""
@@ -286,7 +289,7 @@ else:
                 raise ValueError()
         else:
             key = args[2]
-        if not (decryption <= len(options) and decryption >= 1):
+        if decryption > len(options) or decryption < 1 or len(args) < 4:
             raise ValueError()
     except ValueError:
         print("\nInput should be of the form:\n\tpython decrypt.py [DECRYPTION] [KEY] '[PLAINTEXT]'")
@@ -305,6 +308,9 @@ else:
 
     ciphertext = " ".join(args)
 
+#start timer
+startTime = time.time()
+
 #select/call decryption algorithm
 output = ""
 if(decryption == 1):
@@ -321,5 +327,10 @@ elif(decryption == 6):
     output = decryptECC(ciphertext)
 plaintext = output
 
+#end timer
+endTime = time.time()
+
 print("\nCiphertext:\n" + ciphertext + "\n")
 print("Plaintext:\n" + plaintext + "\n")
+
+print("Time Taken: " + str(endTime-startTime) + "s\n")

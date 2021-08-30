@@ -2,6 +2,7 @@ import sys
 import re
 import textwrap
 import math
+import time
 
 def leftShiftBin(inp):
     out = ""
@@ -390,6 +391,9 @@ else:
 
     plaintext = " ".join(args)
 
+#start timer
+startTime = time.time()
+
 #select/call encryption algorithm
 output = ""
 if(encryption == 1):
@@ -407,8 +411,10 @@ elif(encryption == 6):
     output = encryptECC(plaintext)
 ciphertext = output
 
+#end timer
+endTime = time.time()
+
 print("\nPlaintext:\n" + plaintext + "\n")
 print("Ciphertext:\n" + ciphertext + "\n")
 
-#for i in range(130):
-#    print(chr(i))
+print("time Taken: " + str(endTime-startTime) + "s\n")
