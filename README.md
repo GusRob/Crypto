@@ -1,6 +1,32 @@
 # Crypto
 Practicing Encryption/Decryption Algorithms
 
+### encrypt.py
+
+`python encrypt.py [ENCRYPTION] [KEY] '[PLAINTEXT]'`
+
+  * Where '[ENCRYPTION]' is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
+  * Where '[KEY]' is a key in the format shown in the table below
+  * The output will be the hexadecimal ciphertext, except for ceasar cipher which outputs ASCII
+
+### decrypt.py
+
+`python decrypt.py [DECRYPTION] [KEY] '[CIPHERTEXT]'`
+
+  * Where '[DECRYPTION]' is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
+  * Where '[KEY]' is a key in the format shown in the table below
+  * The output will be the hexadecimal ciphertext, except for ceasar cipher which outputs ASCII
+
+### key.py
+
+`python key.py [KEYLEN] [KEYBASE]`
+
+  * Where both `[KEYLEN]` and `[KEYBASE]` are integer values
+  * `[KEYLEN]` is in # of bits
+  * `[KEYLEN]` is a multiple of 8
+  * `[KEYBASE]` is one of `2`, `8`, `10` or `16`
+  * The `[KEYBASE]` argument is optional, will default to 16
+
 ## This repository will consist of a self project in which i will attempt to:
   *  - [X] Create a program that can encrypt sentences with basic algorithms
   *  - [X] Create a program that can decrypt sentences with basic algorithms
@@ -10,14 +36,14 @@ Practicing Encryption/Decryption Algorithms
 
 ## Bot List
 
-Algorithm | Symmetry | Completed
- :---:|:---:|:---:
-**Caesar** | Symmetric |  <ul><li>- [X] </li></ul>
-**DES** | Symmetric |  <ul><li>- [X] </li></ul>
-**3DES** | Symmetric |  <ul><li>- [X] </li></ul>
-**AES** | Symmetric |  <ul><li>- [ ] </li></ul>
-**RSA** | Asymmetric |  <ul><li>- [ ] </li></ul>
-**ECC** | Asymmetric |  <ul><li>- [ ] </li></ul>
+Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : chars)
+ :---:|:---:|:---:|:---:|:---:|:---:
+**Caesar** | Symmetric |  <ul><li>- [X] </li></ul> | 1 | Decimal | INT_MAX
+**DES** | Symmetric |  <ul><li>- [X] </li></ul> | 2 | Hexadecimal | 64 : 16
+**3DES** | Symmetric |  <ul><li>- [X] </li></ul> | 3 | Hexadecimal | 128/192 : 32/48
+**AES** | Symmetric |  <ul><li>- [ ] </li></ul> | 4 | Hexadecimal | 128 : 32
+**RSA** | Asymmetric |  <ul><li>- [ ] </li></ul> | N/A | N/A | N/A
+**ECC** | Asymmetric |  <ul><li>- [ ] </li></ul> | N/A | N/A | N/A
 
 ## Milestone Log
 
@@ -73,4 +99,3 @@ Algorithm | Symmetry | Completed
       * The `[KEYBASE]` argument is optional, will default to 16
   * The secrets.py module is used as opposed to the random.py module
   * The secrets library function used is `secrets.token_hex([nbytes=None])` as this generates a random text string in hexadecimal format
-
