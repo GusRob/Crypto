@@ -115,6 +115,28 @@ def desSingleSegEncrypt(M, subK_Plus, isEncrypt):
     length = round(len(cipherAsHexStr)/2)*2
     return cipherAsHexStr.zfill(length)
 
+def aesGenState(segIn):
+    stateOut = [["00" for i in range(4)] for i in range(4)]
+
+
+    byteInSeg = 0
+    for x in range(4):
+        for y in range(4):
+            stateOut[x][y] = segIn[byteInSeg*8 : (byteInSeg+1)*8]
+            byteInSeg = byteInSeg+1
+
+    print(stateOut)
+    return stateOut
+
+def aesGenStateReverse(stateIn):
+    segOut = ""
+
+    for x in range(4):
+        for y in range(4):
+            segOut = segOut + stateIn[x][y]
+
+    return segOut
+
 def aesGenKeys(keyIn):
     Nk = len(keyIn)/32
     Nr = Nk + 6
@@ -134,9 +156,36 @@ def aesGenKeys(keyIn):
             w[i] = w[i-Nk] ^ temp
     return w
 
-def aesSingleSegEncrypt(M, K):
-    return
+def aesSubBytes(state):
+    return state
 
+def aesShiftRows(state):
+    return state
+
+def aesMixColumns(state):
+    return state
+
+def aesAddRoundKey(state, K):
+    return state
+
+def aesSingleSegEncrypt(state, w, NbNkNr):
+    Nb = NbNkNr[0]
+    Nk = NbNkNr[1]
+    Nr = NbNkNr[2]
+
+    state = aesAddRoundKey(state, w[0][Nb-1])
+
+    for round in map(lambda n: n+1, range(Nr-1)):
+        state = aesSubBytes(state)
+        state = aesShiftRows(state)
+        state = aesMixColumns(state)
+        state = aesAddRoundKey(state, w[round*Nb][(round+1)*(Nb-1)])
+
+    state = aesSubBytes(state)
+    state = aesShiftRows(state)
+    state = aesAddRoundKey(state, w[Nr*Nb][(Nr+1)*(Nb-1)])
+
+    return state
 
 def encryptCaesar(plain, keyIn):
     cipher = ""
@@ -150,6 +199,7 @@ def encryptCaesar(plain, keyIn):
             newVal = newVal + 95
         cipher = cipher + chr( newVal )
     return cipher
+
 def encryptDES(plain, keyAsHexStr, isEncrypt, isHexInput):
     #STEP 1: Generate subkeys
     subK_Plus = desGenKeys(keyAsHexStr)
@@ -166,6 +216,7 @@ def encryptDES(plain, keyAsHexStr, isEncrypt, isHexInput):
     for seg in plainAsBinStrSegments:
         result = result + desSingleSegEncrypt(seg, subK_Plus, isEncrypt)
     return result
+
 def encrypt3DES(plain, keyIn):
     keys = textwrap.wrap(keyIn, 16)
 
@@ -180,7 +231,12 @@ def encrypt3DES(plain, keyIn):
         result = encryptDES(result, keys[1], True, True)
         result = encryptDES(result, keys[2], True, True)
     return result
-def encryptAES(plain):
+
+def encryptAES(plain, keyIn):
+    Nb = 4                      #No. of 32 bit words comprising the state
+    Nk = len(keyIn)/32          #No. of 32 bit words comprising the key
+    Nr = 10 if Nk == 4 else (12 if Nk == 6 else 14) #No. of rounds
+
     #Step 1: generate subkeys
 
     #Step 2: enode data 128 bits at a time
@@ -193,14 +249,22 @@ def encryptAES(plain):
 
     result = ""
     for seg in plainAsBinStrSegments:
-        result = result + aesSingleSegEncrypt(seg, K)
+        plainState = aesGenState(seg)
+        cipherState = aesSingleSegEncrypt(plainState, key, (Nb, Nk, Nr))
+        result = result + aesGenStateReverse(cipherState)
 
-    return plain
+
+    cipherAsDecInt = int(result, 2)
+    cipherAsHexStr = hex(cipherAsDecInt)[2:]
+
+
+    return cipherAsHexStr
+
 def encryptRSA(plain):
     return plain
+
 def encryptECC(plain):
     return plain
-
 
 def isValidText(s):
     result = True
@@ -211,7 +275,6 @@ def isValidText(s):
 
 def isValidChar(c):
     return (32 <= ord(c)) and (126 >= ord(c))
-
 
 def reqEncryption():
     encryption = ""
@@ -271,8 +334,6 @@ def reqEncryption():
 
     return encryption, plaintext, key
 
-
-
 options = {
     1:"Caesar",  #symmetric
     2:"DES",     #
@@ -310,7 +371,7 @@ else:
                 raise ValueError()
         else:
             key = args[2]
-        if not (encryption <= len(options) and encryption >= 1):
+        if encryption > len(options) or encryption < 1 or len(args) < 4:
             raise ValueError()
     except ValueError:
         print("\nInput should be of the form:\n\tpython encrypt.py [ENCRYPTION] [KEY] '[PLAINTEXT]'")
@@ -339,7 +400,7 @@ elif(encryption == 2):
 elif(encryption == 3):
     output = encrypt3DES(plaintext, key)
 elif(encryption == 4):
-    output = encryptAES(plaintext)
+    output = encryptAES(plaintext, key)
 elif(encryption == 5):
     output = encryptRSA(plaintext)
 elif(encryption == 6):
