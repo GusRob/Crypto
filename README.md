@@ -106,3 +106,5 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
   * Included a timer library to time completion of encryption/decryption functions
     * Included to allow for potential cracking of encrypted ciphertext without key
     * (I have no intention for this currently, but it may prove useful to test encryption implementations too)
+    * Should this be the case however, a link to a github page with a 'gibberish classifier' could prove useful, shown below
+      * https://github.com/thomas-daniels/GibberishClassifier-Python/blob/master/gibberishclassifier.py
