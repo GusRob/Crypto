@@ -86,7 +86,7 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
     * Test program on larger strings of text (e.g. whole paragraphs)
     * Test user input to only allow plaintext with single quotes surrounding
 
-2021/08/14
+2021/08/22
   * Simple pseudo-random key generation implemented
   * Should be useful for more in depth testing of the encryption algorithms
   * Usage is as follows:
