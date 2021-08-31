@@ -475,7 +475,6 @@ output = ""
 if(encryption == 1):
     output = encryptCaesar(plaintext, key)
 elif(encryption == 2):
-    print(plaintext)
     output = encryptDES(plaintext, key, True, False)
 elif(encryption == 3):
     output = encrypt3DES(plaintext, key)
