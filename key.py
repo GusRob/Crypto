@@ -9,6 +9,8 @@ keyBytes = 0
 keyBase = 16
 
 try:
+    if(len(args) < 2):
+        raise ValueError
     keyLen = int(args[1])
     if(not keyLen%8 == 0):
         raise ValueError
