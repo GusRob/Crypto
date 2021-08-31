@@ -34,14 +34,14 @@ Practicing Encryption/Decryption Algorithms
   *  - [ ] Improve the decryption program to more advanced algorithms
   *  - [ ] Develop a key-sharing algorithm implementation?
 
-## Bot List
+## Encryption Algorithm List
 
 Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex chars)
  :---:|:---:|:---:|:---:|:---:|:---:
 **Caesar** | Symmetric |  <ul><li>- [X] </li></ul> | 1 | Decimal | INT_MAX
 **DES** | Symmetric |  <ul><li>- [X] </li></ul> | 2 | Hexadecimal | 64 : 16
 **3DES** | Symmetric |  <ul><li>- [X] </li></ul> | 3 | Hexadecimal | 128 : 32 or 192 : 48
-**AES** | Symmetric |  <ul><li>- [ ] </li></ul> | 4 | Hexadecimal | 128 : 32 or 192 : 48 or 256 : 64
+**AES** | Symmetric |  <ul><li>- [X] </li></ul> | 4 | Hexadecimal | 128 : 32 or 192 : 48 or 256 : 64
 **RSA** | Asymmetric |  <ul><li>- [ ] </li></ul> | 5 | N/A | N/A
 **ECC** | Asymmetric |  <ul><li>- [ ] </li></ul> | 6 | N/A | N/A
 
@@ -108,3 +108,14 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
     * (I have no intention for this currently, but it may prove useful to test encryption implementations too)
     * Should this be the case however, a link to a github page with a 'gibberish classifier' could prove useful, shown below
       * https://github.com/thomas-daniels/GibberishClassifier-Python/blob/master/gibberishclassifier.py
+
+2021/08/31
+  * AES encryption and decryption implemented
+  * Key length can be of 128, 192 or 256 bits
+  * Uses mix_columns and inv_mix_columns algorithms from https://github.com/boppreh/aes/blob/master/aes.py for more concise code
+  * Using Time Taken addition, it is possible to calculate how long it might take to brute force the key using this machine, added to README.md
+  * Todo:
+    * Develop asymmetric key cipher algorithms, starting with either RSA or ECC
+    * Implement asymmetric key generation into the `key.py` program
+    * Develop a key-sharing algorithm??
+  
