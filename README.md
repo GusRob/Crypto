@@ -47,14 +47,14 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
 
 ### Estimation of Time to Brute-Force
 
-In the case of multiple key sizes, **[CIPHER]-[BITSINKEY]** has been used. The final three columns show the estimated time taken to test the given percentage of all possible keys; e.g. For DES there are 288230376151711744 keys to test, so in the column labelled '50%', there will be the estimated time taken to test 144115188075855872 keys. In the column labelled 'Av Time To Decrypt' the average time to decrypt is calculated using the average of 1000 decryptions of a sample block of text, which is kept constant across the ciphers.
+In the case of multiple key sizes, **[CIPHER]-[KEYVARIATION]** has been used. The final three columns show the estimated time taken to test the given percentage of all possible keys; e.g. For DES there are 288230376151711744 keys to test, so in the column labelled '50%', there will be the estimated time taken to test 144115188075855872 keys. In the column labelled 'Av Time To Decrypt' the average time to decrypt is calculated using the average of 1000 decryptions of a sample block of text, which is kept constant across the ciphers.
 
 Algorithm | No. Of Keys | Av Time To Decrypt | 50% | 90% | 100%
  :---:|:---:|:---:|:---:|:---:|:---:
 **Caesar** | 25 | N/A | N/A | N/A | N/A
 **DES** | 2^58 | N/A | N/A | N/A | N/A
-**3DES-128** | 2^112 | N/A | N/A | N/A | N/A
-**3DES-192** | 2^168 | N/A | N/A | N/A | N/A
+**3DES-2KEY** | 2^112 | N/A | N/A | N/A | N/A
+**3DES-3KEY** | 2^168 | N/A | N/A | N/A | N/A
 **AES-128** | 2^128 | N/A | N/A | N/A | N/A
 **AES-192** | 2^192 | N/A | N/A | N/A | N/A
 **AES-256** | 2^256 | N/A | N/A | N/A | N/A
