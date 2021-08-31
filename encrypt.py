@@ -134,6 +134,7 @@ def aesGenStateReverse(stateIn):
     for x in range(4):
         for y in range(4):
             segOut = segOut + stateIn[x][y]
+        segOut = segOut
 
     return segOut
 
@@ -191,10 +192,6 @@ def aesGenKeys(keyIn, NbNkNr):
         elif (Nk > 6 and i % Nk == 4):
             temp = aesSubWord(temp)
         w[i] = bin(int(w[i-Nk], 2) ^ int(temp, 2))[2:].zfill(8*Nb)
-
-    print([hex(int(wi, 2)) for wi in w])
-    print(hex(int(w[43], 2)))
-    print(len(w))
     return w
 
 def aesSubBytes(stateIn):
@@ -220,7 +217,7 @@ def aesShiftRows(stateIn):
     stateOut = [[stateIn[x][y] for x in range(4)] for y in range(4)]
     for x in range(4):
         for y in range(4):
-            stateOut[x][y] = stateIn[x][(y+x)%4]
+            stateOut[y][x] = stateIn[(y+x)%4][x]
     return stateOut
 
 def aesMixColumns(stateIn):
@@ -228,38 +225,37 @@ def aesMixColumns(stateIn):
     xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)
 
     for y in range(4):
-        a = [int(stateIn[x][y], 2) for x in range(4)]
+        a = [int(stateIn[y][x], 2) for x in range(4)]
         t = a[0] ^ a[1] ^ a[2] ^ a[3]
         u = a[0]
-        stateOut[0][y] = bin(a[0] ^ (t ^ xtime(a[0] ^ a[1])))[2:].zfill(8)
-        stateOut[1][y] = bin(a[1] ^ (t ^ xtime(a[1] ^ a[2])))[2:].zfill(8)
-        stateOut[2][y] = bin(a[2] ^ (t ^ xtime(a[2] ^ a[3])))[2:].zfill(8)
-        stateOut[3][y] = bin(a[3] ^ (t ^ xtime(a[3] ^ u)))[2:].zfill(8)
+        stateOut[y][0] = bin(a[0] ^ (t ^ xtime(a[0] ^ a[1])))[2:].zfill(8)
+        stateOut[y][1] = bin(a[1] ^ (t ^ xtime(a[1] ^ a[2])))[2:].zfill(8)
+        stateOut[y][2] = bin(a[2] ^ (t ^ xtime(a[2] ^ a[3])))[2:].zfill(8)
+        stateOut[y][3] = bin(a[3] ^ (t ^ xtime(a[3] ^ u)))[2:].zfill(8)
     return stateOut
 
-def aesAddRoundKey(state, K):
-    return state
+def aesAddRoundKey(stateIn, K):
+    stateOut = [[stateIn[x][y] for x in range(4)] for y in range(4)]
+    subKeySet = [textwrap.wrap(i, 8) for i in K]
+    stateOut = aesGenState(bin(int(aesGenStateReverse(stateIn), 2) ^ int(aesGenStateReverse(subKeySet), 2))[2:].zfill(128))
+    return stateOut
 
 def aesSingleSegEncrypt(state, w, NbNkNr):
     Nb = NbNkNr[0]
     Nk = NbNkNr[1]
     Nr = NbNkNr[2]
 
-    print(state)
-    state = aesMixColumns(state)
-    print(state)
-
-    state = aesAddRoundKey(state, w[0][Nb-1])
+    state = aesAddRoundKey(state, w[0:Nb])
 
     for round in map(lambda n: n+1, range(Nr-1)):
         state = aesSubBytes(state)
         state = aesShiftRows(state)
         state = aesMixColumns(state)
-        state = aesAddRoundKey(state, w[round*Nb][(round+1)*(Nb-1)])
+        state = aesAddRoundKey(state, w[round*Nb:((round+1)*(Nb))])
 
     state = aesSubBytes(state)
     state = aesShiftRows(state)
-    state = aesAddRoundKey(state, w[Nr*Nb][(Nr+1)*(Nb-1)])
+    state = aesAddRoundKey(state, w[Nr*Nb:((Nr+1)*(Nb))])
 
     return state
 
@@ -314,9 +310,9 @@ def encryptAES(plain, keyIn):
     Nr = 10 if Nk == 4 else (12 if Nk == 6 else 14) #No. of rounds
 
     #Step 1: generate subkeys
-    subkeys = aesGenKeys(keyIn, (Nb, Nk, Nr))
+    subKeys = aesGenKeys(keyIn, (Nb, Nk, Nr))
 
-    #Step 2: enode data 128 bits at a time
+    #Step 2: enode data 128 bits at a time     testStrings:     "00112233445566778899aabbccddeeff"  "3243F6A8885A308D313198a2e0370734"
     plainAsHexStr = plain.encode("utf-8").hex()
     plainAsDecInt = int(plainAsHexStr , 16)
     plainAsBinStr = bin(plainAsDecInt)[2:]
@@ -493,4 +489,4 @@ endTime = time.time()
 print("\nPlaintext:\n" + plaintext + "\n")
 print("Ciphertext:\n" + ciphertext + "\n")
 
-print("time Taken: " + str(endTime-startTime) + "s\n")
+print("Time Taken: " + str(endTime-startTime) + "s\n")
