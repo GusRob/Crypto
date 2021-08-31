@@ -442,6 +442,10 @@ else:
             key = args[2]
             if(not len(key) == 48 and not len(key) == 32):
                 raise ValueError()
+        elif(encryption == 4):
+            key = args[2]
+            if(not len(key) == 64 and not len(key) == 48 and not len(key) == 32):
+                raise ValueError()
         else:
             key = args[2]
         if encryption > len(options) or encryption < 1 or len(args) < 4:
