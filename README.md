@@ -1,21 +1,14 @@
 # Crypto
 Practicing Encryption/Decryption Algorithms
 
-### encrypt.py
+### crypto.py
 
-`python encrypt.py [ENCRYPTION] [KEY] '[PLAINTEXT]'`
+`python crypto.py [ISENCRYPT] [ENCRYPTION] [KEY] '[INPUT]'`
 
+  * Where '[ISENCRYPT]' sets the program to either encrypt or decrypt the given input, this argument can either be 'encrypt' or 'decrypt'
   * Where '[ENCRYPTION]' is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
   * Where '[KEY]' is a key in the format shown in the table below
-  * The output will be the hexadecimal ciphertext, except for ceasar cipher which outputs ASCII
-
-### decrypt.py
-
-`python decrypt.py [DECRYPTION] [KEY] '[CIPHERTEXT]'`
-
-  * Where '[DECRYPTION]' is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
-  * Where '[KEY]' is a key in the format shown in the table below
-  * The output will be the hexadecimal ciphertext, except for ceasar cipher which outputs ASCII
+  * The output will be the hexadecimal ciphertext or ASCII plaintext, except for ceasar cipher which always outputs ASCII
 
 ### key.py
 
@@ -134,4 +127,15 @@ Algorithm | No. Of Keys | Av Time To Decrypt | 50% | 90% | 100%
     * Develop asymmetric key cipher algorithms, starting with either RSA or ECC
     * Implement asymmetric key generation into the `key.py` program
     * Develop a key-sharing algorithm??
+
+2021/09/02
+  * Redesigned the program to separate code corresponding to different algorithms
+  * The AES and DES algorithms now exist in separate libraries `aes.py` and `des.py` to the main executable, `crypto.py` 
+  * Caesar Cipher, as a single short function still exists within `crypto.py`
+  * `crypto.py` is now able to encrypt and decrypt without having to call different files
+  * Changes completed in a different branch, needs to be merged to main
+  * Todo:
+    * Further algorithms that are implemented will be done as separate libraries too
+    * RSA will be next to implement
+    * Need to devise how `key.py` can output asymmetric key-pairs
   
