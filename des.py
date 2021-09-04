@@ -146,7 +146,6 @@ def encrypt3DES(input, keyIn, isEncrypt):
     inputAsHexStr = input.encode("utf-8").hex() if isEncrypt else input
 
     result = ""
-    print(keys)
 
     if(len(keys) == 2):
         result = encryptDESHex2Hex(inputAsHexStr, keys[0], isEncrypt)

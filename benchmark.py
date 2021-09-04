@@ -28,7 +28,8 @@ def errorMsg():
         print(str(item[0])+ " : " + str(item[1]), end=" | " if item[1] != len(options) else "")
     print("]")
     print("\nWhere [ENCRYPTION] is an integer referring to the encryption algorithm")
-    print("\nWhere [NTRIES] is an optional integer referring to the number of times to execute the algorithm, default 1000\n")
+    print("\nWhere [NTRIES] is an optional integer referring to the number of times to execute the algorithm, default 1000")
+    print("\nWhere [KEYLEN] is number of bits in key to use (128, 192, 156) or number of keys to use (3DES)\n")
     exit(0)
 
 options = {
@@ -42,14 +43,16 @@ options = {
 
 args = sys.argv
 encryption = 1
+keyLen = 0
 nTests = 1000
 
-if(len(args) == 3):
+
+if(len(args) >= 3):
     try:
         nTests = int(args[2])
     except ValueError:
         errorMsg()
-if(len(args) == 2 or len(args) == 3):
+if(len(args) >= 2):
     #Find encryption method from dictionary
     try:
         encryption = int(args[1]) #integer entered
@@ -62,7 +65,12 @@ if(len(args) == 2 or len(args) == 3):
     #check validity of encryption
     if encryption > len(options) or encryption < 1:
         errorMsg()
-else:
+if(len(args) == 4):
+    try:
+        keyLen = int(args[3])
+    except ValueError:
+        errorMsg()
+elif(len(args) < 2 or len(args) > 4):
     errorMsg()
 
 if(encryption == 1):
@@ -70,9 +78,26 @@ if(encryption == 1):
 elif(encryption == 2):
     key = "1234567890ABCDEF"
 elif(encryption == 3):
-    key = "1234567890ABCDEF1234567890ABCDEF"
+    if(keyLen == 0 or keyLen == 2 or keyLen == 128 or keyLen == 112):
+        keyLen = " with 2 keys"
+        key = "1234567890ABCDEFFEDCBA0987654321"
+    elif(keyLen == 3 or keyLen == 192 or keyLen == 168):
+        keyLen = " with 3 keys"
+        key = "1234567890ABCDEFFEDCBA098765432124680BDFECA97531"
+    else:
+        errorMsg()
 elif(encryption == 4):
-    key = "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF"
+    if(keyLen == 0 or keyLen == 2 or keyLen == 128):
+        keyLen = "-128"
+        key = "1234567890ABCDEFFEDCBA0987654321"
+    elif(keyLen == 3 or keyLen == 192):
+        keyLen = "-192"
+        key = "1234567890ABCDEFFEDCBA098765432124680BDFECA97531"
+    elif(keyLen == 4 or keyLen == 256):
+        keyLen = "-256"
+        key = "1234567890ABCDEFFEDCBA098765432124680BDFECA9753113579ACEFDB08642"
+    else:
+        errorMsg()
 elif(encryption == 5):
     input = encryptRSA(example)
 elif(encryption == 6):
@@ -115,6 +140,11 @@ for i in range(nTests):
         output = encryptECC(input)
 
 end = time.time()
-print("Finished " + str(nTests) + " encryptions")
+
+encryptionStr = "Error"
+for item in options.items():
+    if item[1] == encryption:
+        encryptionStr = item[0]
+print("Finished " + str(nTests) + " encryptions using " + encryptionStr + (keyLen if type(keyLen) == str else ""))
 
 print("Time Taken: " + str(end-start) + "s")
