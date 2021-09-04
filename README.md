@@ -42,17 +42,21 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
 
 In the case of multiple key sizes, **[CIPHER]-[KEYVARIATION]** has been used. The final three columns show the estimated time taken to test the given percentage of all possible keys; e.g. For DES there are 288230376151711744 keys to test, so in the column labelled '50%', there will be the estimated time taken to test 144115188075855872 keys. In the column labelled 'Av Time To Decrypt' the average time to decrypt is calculated using the average of 1000 decryptions of a sample block of text, which is kept constant across the ciphers.
 
-Algorithm | No. Of Keys | Av Time To Decrypt | 50% | 90% | 100%
+Algorithm | No. Of Keys | Av Time To Decrypt (seconds) | 50% (years) | 90% (years) | 100% (years)
  :---:|:---:|:---:|:---:|:---:|:---:
-**Caesar** | 25 | N/A | N/A | N/A | N/A
-**DES** | 2^58 | N/A | N/A | N/A | N/A
-**3DES-2KEY** | 2^112 | N/A | N/A | N/A | N/A
-**3DES-3KEY** | 2^168 | N/A | N/A | N/A | N/A
-**AES-128** | 2^128 | N/A | N/A | N/A | N/A
-**AES-192** | 2^192 | N/A | N/A | N/A | N/A
-**AES-256** | 2^256 | N/A | N/A | N/A | N/A
-**RSA** | N/A | N/A | N/A | N/A | N/A
+**Caesar** | 25 | 0.15515875816345215 | N/A | N/A | N/A
+**DES** | 2^58 | 24.41735816001892 | N/A | N/A | N/A
+**3DES-2KEY** | 2^112 | 74.09152507781982 | N/A | N/A | N/A
+**3DES-3KEY** | 2^168 | 72.97424387931824 | N/A | N/A | N/A th
+**AES-128** | 2^128 | 52.747599840164185 | N/A | N/A | N/A
+**AES-192** | 2^192 | 62.59677004814148 | N/A | N/A | N/A
+**AES-256** | 2^256 | 74.68215489387512 | N/A | N/A | N/A
+**RSA** | N/A | N/A | N/A | N/A | N/Are
 **ECC** | N/A | N/A | N/A | N/A | N/A
+
+Obviously using a laptop CPU to solve an embarassingly parallelisable problem such as decryption is by no means the most efficient method to crack any of these ciphers, and the table shows how long a brute force attack might take on this device. However this does pose a starting point for how long a sophisticated attack might take on such a cipher. Following a normal distribution, the probabillity of the key being found by the time that 50% of keys have been tried is quite high, and multiple cores testing keys simultaneously would divide the problem massively and can make breaking these codes much quicker, but brute force attacks are still by no means feasible in most cases. For example, the 'record' for cracking DES currently sits at 23 hours, using far more sophisticated attacks than brute forcing every key possible, exploiting weaknesses in the encryption algorithm itself. However thease measurements of the time taken to decrypt give an indication to compare algorithms with each other. 
+
+AES encryption is yet to be repeatably broken. While there are exploits to reduce the time taken to test possible keys, or to minimie the key space, the length of time required to test a reasonable proportion of the key space is still far too large for this to be possible. This is reflected in the above table where AES-256 requires over 2.4\*10^68 years to solve which would still be a ridiculously large number, even with unlimited funds to complete. 
 
 ## Milestone Log
 
