@@ -83,7 +83,7 @@ try:
     input = args[4]
 except ValueError:
     #Error Messages
-    print("\nInput should be of the form:\n\tpython encrypt.py [ENCRYPT/DECRYPT] [ENCRYPTION] [KEY] '[INPUTSTR]'")
+    print("\nInput should be of the form:\n\tpython crypto.py [ENCRYPT/DECRYPT] [ENCRYPTION] [KEY] '[INPUTSTR]'")
     print("\nEncryption Algorithms Available: ")
     print("\n[", end="")
     for item in options.items():
@@ -108,7 +108,7 @@ elif(encryption == 3):
 elif(encryption == 4):
     output = aes.encryptAES(input, key, isEncrypt)
 elif(encryption == 5):
-    output = encryptRSA(input)
+    output = encryptRSA(input, key, isEncrypt)
 elif(encryption == 6):
     output = encryptECC(input)
 
