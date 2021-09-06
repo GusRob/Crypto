@@ -4,37 +4,71 @@ import secrets
 
 args = sys.argv
 
-keyBytes = 0
+encryption = 0
+keyLen = 0
+key = 0
 
-keyBase = 16
+options = {
+    "Caesar":1,  #symmetric
+    "DES":2,     #
+    "3DES":3,    #
+    "AES":4,     #symmetric
+    "RSA":5,     #asymmetric
+    "ECC":6,     #
+}
 
 try:
-    if(len(args) < 2):
+    #check number of arguments
+    if(len(args) < 2 or len(args) > 2):
         raise ValueError
-    keyLen = int(args[1])
-    if(not keyLen%8 == 0):
-        raise ValueError
-    keyBytes = int(keyLen/8)
-    if(len(args) > 2):
-        keyBase = int(args[2])
-    if(not keyBase in [2, 8, 10, 16]):
+    #get encryption and keyLength
+    for item in options:
+        if args[1].startswith(item):
+            encryption = int(options[item])
+            if("-" in args[1]):
+                keyLen = int(args[1].split("-",1)[1])
+            break
+    if(encryption == 1):
+        keyLen = 0
+    elif(encryption == 2):
+        if(keyLen == 0 or keyLen == 64):
+            keyLen = 8
+        else:
+            raise ValueError
+    elif(encryption == 3):
+        if(keyLen == 0 or keyLen == 2 or keyLen == 128):
+            keyLen = 16
+        elif(keyLen == 3 or keyLen == 192):
+            keyLen = 24
+        else:
+            raise ValueError
+    elif(encryption == 4):
+        if(keyLen == 0 or keyLen == 128):
+            keyLen = 16
+        elif(keyLen == 192):
+            keyLen = 24
+        elif(keyLen == 256):
+            keyLen = 32
+        else:
+            raise ValueError
+    elif(encryption == 5):
+        keyLen = 0
+    else:
         raise ValueError
 except ValueError:
-    print("\nInput should be of the form:\n\n\tpython key.py [KEYLEN] \nOR\n\tpython key.py [KEYLEN] [KEYBASE]")
-    print("\nBoth arguments KEYLEN and KEYBASE should be integers")
-    print("\nKEYLEN should be in bits, KEYLEN should be divisible by 8")
-    print("\nKEYBASE should be either 2, 8, 10 or 16")
+    print("\nInput should be of the form:\n\n\tpython key.py [ENCRYPTION]")
+    print("\nENCRYPTION should be the algorithm to use")
+    print("\nFor algorithms with multiple key lengths available, key length should follow the encryption with a hyphen separator")
+    print("\ne.g.  ENCRYPTION-KEYLEN where KEYLEN is in bits/number of keys for 3DES\n")
+    exit(0)
 
 
-key = secrets.token_hex(keyBytes)
-
-if(not keyBase == 16):
-    intKey = int(key, 16)
-    if(keyBase == 2):
-        key = bin(intKey)[2:]
-    elif(keyBase == 8):
-        key = oct(intKey)[2:]
-    elif(keyBase == 10):
-        key = intKey
+if(encryption == 1):
+    key = secrets.randbelow(25)+1
+elif(encryption in [2, 3, 4]):
+    key = secrets.token_hex(keyLen)
+else:
+    print("Something went wrong")
+    exit(0)
 
 print(key)

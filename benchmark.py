@@ -21,7 +21,7 @@ def encryptCaesar(input, keyIn, isEncrypt):
 
 def errorMsg():
     print("\nUsage:")
-    print("\tpython benchmark.py [ENCRYPTION] [NTRIES]")
+    print("\tpython benchmark.py [ENCRYPTION] [NTRIES] [KEYLEN]")
     print("\nEncryption Algorithms Available: ")
     print("\n[", end="")
     for item in options.items():
