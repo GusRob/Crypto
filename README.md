@@ -5,9 +5,9 @@ Practicing Encryption/Decryption Algorithms
 
 `python crypto.py [ISENCRYPT] [ENCRYPTION] [KEY] '[INPUT]'`
 
-  * Where '[ISENCRYPT]' sets the program to either encrypt or decrypt the given input, this argument can either be 'encrypt' or 'decrypt'
-  * Where '[ENCRYPTION]' is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
-  * Where '[KEY]' is a key in the format shown in the table below
+  * Where `[ISENCRYPT]` sets the program to either encrypt or decrypt the given input, this argument can either be 'encrypt' or 'decrypt'
+  * Where `[ENCRYPTION]` is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
+  * Where `[KEY]` is a key in the format shown in the table below
   * The output will be the hexadecimal ciphertext or ASCII plaintext, except for ceasar cipher which always outputs ASCII
 
 ### key.py
@@ -20,11 +20,20 @@ Practicing Encryption/Decryption Algorithms
   * `[KEYBASE]` is one of `2`, `8`, `10` or `16`
   * The `[KEYBASE]` argument is optional, will default to 16
 
+### benchmark.py
+
+`python benchmark.py [ENCRYPTION] [NTRIES] [KEYLEN]`
+
+  * Where `[ENCRYPTION]` is an integer ID corresponding to the encryption algorithm to be used (shown in table below)
+  * Where `[NTRIES]` is an optional integer referring to the number of decryptions to complete, default 1000
+  * Where `[KEYLEN` is number of bits to use, for algorithms with multiple possible key lengths, in bits, defaults to shortest option
+
 ## This repository will consist of a self project in which i will attempt to:
   *  - [X] Create a program that can encrypt sentences with basic algorithms
   *  - [X] Create a program that can decrypt sentences with basic algorithms
   *  - [ ] Improve the encryption program to more advanced algorithms
   *  - [ ] Improve the decryption program to more advanced algorithms
+  *  - [X] Develop a key generation algorithm implementation
   *  - [ ] Develop a key-sharing algorithm implementation?
 
 ## Encryption Algorithm List
