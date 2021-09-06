@@ -12,13 +12,12 @@ Practicing Encryption/Decryption Algorithms
 
 ### key.py
 
-`python key.py [KEYLEN] [KEYBASE]`
+`python key.py [ENCRYPTION]`
 
-  * Where both `[KEYLEN]` and `[KEYBASE]` are integer values
-  * `[KEYLEN]` is in # of bits
-  * `[KEYLEN]` is a multiple of 8
-  * `[KEYBASE]` is one of `2`, `8`, `10` or `16`
-  * The `[KEYBASE]` argument is optional, will default to 16
+  * Where `[ENCRYPTION]` is the ID of the algorithm to use or it's string name
+  * `[ENCRYPTION]` can be followed by `-[KEYLEN]` for algorithms with multiple key lengths
+  * `[KEYLEN]` is an integer, referring to number of bits in the key
+  * For 3DES, `[KEYLEN]` can be number of keys or number of bits in the combined keys
 
 ### benchmark.py
 
@@ -152,3 +151,12 @@ AES encryption is yet to be repeatably broken. While there are exploits to reduc
     * RSA will be next to implement
     * Need to devise how `key.py` can output asymmetric key-pairs
   
+2021/09/06
+  * `key.py` program edited to provide a framework for the asymmetric key generation program
+    * Changed input format to allow multiple key lengths to be generated for different algorithms
+    * Single input argument is in the form `[ENCRYPTION]-[KEYLEN]` where the hyphen and `[KEYLEN]` argument are optional, default is shortest possible key length for that algorithm
+    * RSA keys will likely be stored in individual files, then when calling the algorithm the key files will be read instead of copy pasting the long key strings
+  * RSA library `rsa.py` created with empty method as skeleton
+  * Todo:
+    * RSA key generation implementation
+    * RSA encryption to be implemented
