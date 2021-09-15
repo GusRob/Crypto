@@ -100,7 +100,8 @@ elif(encryption == 4):
     else:
         errorMsg()
 elif(encryption == 5):
-    input = encryptRSA(example)
+    key = "RSA_Keys/Public.txt"
+    rsa.rsaGenerateKey(keyLen)
 elif(encryption == 6):
     input = encryptECC(example)
 
@@ -108,17 +109,23 @@ elif(encryption == 6):
 start = time.time()
 print("Started encryption")
 
-#exection loop
+inputKey = key
+outputKey = key
+if(encryption == 5):
+    inputKey = "RSA_Keys/Public.txt"
+    outputKey = "RSA_Keys/Private.txt"
+
+#execution loop
 if(encryption == 1):
-    input = encryptCaesar(example, key, True)
+    input = encryptCaesar(example, inputKey, True)
 elif(encryption == 2):
-    input = des.encryptDES(example, key, True)
+    input = des.encryptDES(example, inputKey, True)
 elif(encryption == 3):
-    input = des.encrypt3DES(example, key, True)
+    input = des.encrypt3DES(example, inputKey, True)
 elif(encryption == 4):
-    input = aes.encryptAES(example, key, True)
+    input = aes.encryptAES(example, inputKey, True)
 elif(encryption == 5):
-    input = encryptRSA(example)
+    input = rsa.encryptRSA(example, inputKey, True)
 elif(encryption == 6):
     input = encryptECC(example)
 
@@ -128,15 +135,15 @@ print("Started decryption")
 
 for i in range(nTests):
     if(encryption == 1):
-        output = encryptCaesar(input, key, False)
+        output = encryptCaesar(input, outputKey, False)
     elif(encryption == 2):
-        output = des.encryptDES(input, key, False)
+        output = des.encryptDES(input, outputKey, False)
     elif(encryption == 3):
-        output = des.encrypt3DES(input, key, False)
+        output = des.encrypt3DES(input, outputKey, False)
     elif(encryption == 4):
-        output = aes.encryptAES(input, key, False)
+        output = aes.encryptAES(input, outputKey, False)
     elif(encryption == 5):
-        output = encryptRSA(input)
+        output = rsa.encryptRSA(input, outputKey, False)
     elif(encryption == 6):
         output = encryptECC(input)
 
