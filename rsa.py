@@ -96,6 +96,7 @@ def generateLargePrime(keysize = 1024):
         if isPrime(num):
             return num
 def rsaGenerateKey(keySize):
+    keySize = keySize/2
     # Step 1: Create two prime numbers, p and q. Calculate n = p * q.
     p = generateLargePrime(keySize)
     q = generateLargePrime(keySize)
