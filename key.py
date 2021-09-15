@@ -2,6 +2,7 @@ import sys
 import secrets
 import random
 import rsa
+import ecc
 
 
 def writeFile(filename, input):
@@ -61,6 +62,9 @@ try:
     elif(encryption == 5):
         if(keyLen == 0):
             keyLen = 1024
+    elif(encryption == 6):
+        if(keyLen == 0):
+            keyLen = 1234
     else:
         raise ValueError
 except ValueError:
@@ -77,17 +81,25 @@ elif(encryption in [2, 3, 4]):
     key = secrets.token_hex(keyLen)
 elif(encryption == 5):
     key = rsa.rsaGenerateKey(keyLen)
+elif(encryption == 6):
+    key = ecc.eccGenerateKey(keyLen)
 else:
     print("Something went wrong")
     exit(0)
 
-if(encryption != 5):
+if(encryption != 5 and encryption != 6):
     print(key)
 else:
-    filepathPublic = "RSA_Keys/Public.txt"
-    filepathPrivate = "RSA_Keys/Private.txt"
+    if(encryption == 6):
+        filepathPublic = "ECC_Keys/Public.txt"
+        filepathPrivate = "ECC_Keys/Private.txt"
+        alg = "ECC"
+    elif(encryption == 5):
+        filepathPublic = "RSA_Keys/Public.txt"
+        filepathPrivate = "RSA_Keys/Private.txt"
+        alg = "RSA"
     print("Writing Public Key to " + filepathPublic)
     print("Writing Private Key to " + filepathPrivate)
     writeFile(filepathPublic, "Public Key: " + str(key[0]))
     writeFile(filepathPrivate, "Private Key: " + str(key[1]))
-    print("Completed RSA Key Generation")
+    print("\nCompleted " + alg + " Key Generation\n")

@@ -103,7 +103,8 @@ elif(encryption == 5):
     key = "RSA_Keys/Public.txt"
     rsa.rsaGenerateKey(keyLen)
 elif(encryption == 6):
-    input = encryptECC(example)
+    key = "ECC_Keys/Public.txt"
+    ecc.eccGenerateKey(keyLen)
 
 
 start = time.time()
@@ -114,6 +115,9 @@ outputKey = key
 if(encryption == 5):
     inputKey = "RSA_Keys/Public.txt"
     outputKey = "RSA_Keys/Private.txt"
+elif(encryption == 6):
+    inputKey = "ECC_Keys/Public.txt"
+    outputKey = "ECC_Keys/Private.txt"
 
 #execution loop
 if(encryption == 1):
@@ -127,7 +131,7 @@ elif(encryption == 4):
 elif(encryption == 5):
     input = rsa.encryptRSA(example, inputKey, True)
 elif(encryption == 6):
-    input = encryptECC(example)
+    input = ecc.encryptECC(example, inputKey, True)
 
 print("Finished encryption")
 print("Started decryption")
@@ -145,7 +149,7 @@ for i in range(nTests):
     elif(encryption == 5):
         output = rsa.encryptRSA(input, outputKey, False)
     elif(encryption == 6):
-        output = encryptECC(input)
+        output = ecc.encryptECC(input, outputKey, False)
 
 end = time.time()
 

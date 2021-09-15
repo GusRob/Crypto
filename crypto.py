@@ -6,6 +6,7 @@ import time
 import des #custom Library
 import aes #custom Library
 import rsa #custom Library
+import ecc #custom Library
 
 def encryptCaesar(input, keyIn, isEncrypt):
     output = ""
@@ -110,7 +111,7 @@ elif(encryption == 4):
 elif(encryption == 5):
     output = rsa.encryptRSA(input, key, isEncrypt)
 elif(encryption == 6):
-    output = encryptECC(input)
+    output = ecc.encryptECC(input, key, isEncrypt)
 
 #end timer
 endTime = time.time()
