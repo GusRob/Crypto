@@ -160,3 +160,14 @@ AES encryption is yet to be repeatably broken. While there are exploits to reduc
   * Todo:
     * RSA key generation implementation
     * RSA encryption to be implemented
+
+2021/09/15
+  * `rsa.py` library implemented
+    * Original implementation had key generation in key.py, but due to the relatively shorter encryption/decryption imlpementation, asymmetric key generation is in `rsa.py`
+    * Original implementation with `C = (M^k) mod N` was unsuccessful for sufficiently large keys
+      * Resultant implementation consists of the python `pow(a, b, n)` function which uses much faster modular exponentiation to complete the calculation quicker
+  * `benchmark.py` now creates asymmetric key variables before the main execution loop, where symmetric keys have equal values for these variables
+  * Todo:
+    * Research ECC encryption algorithms
+    * Research key generation for ECC and implement into `key.py`
+    * Add benchmarks to table within `README.md`
