@@ -171,6 +171,6 @@ RSA encryption uses, in theory any length of key. For this project i will benchm
       * Resultant implementation consists of the python `pow(a, b, n)` function which uses much faster modular exponentiation to complete the calculation quicker
   * `benchmark.py` now creates asymmetric key variables before the main execution loop, where symmetric keys have equal values for these variables
   * Todo:
-    * Research ECC encryption algorithms
+    * Research ECC encryption algorithms webpage: https://cryptobook.nakov.com/asymmetric-key-ciphers/elliptic-curve-cryptography-ecc
     * Research key generation for ECC and implement into `key.py`
     * Add benchmarks to table within `README.md`
