@@ -50,16 +50,16 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
 
 In the case of multiple key sizes, **[CIPHER]-[KEYVARIATION]** has been used. The final three columns show the estimated time taken to test the given percentage of all possible keys; e.g. For DES there are 288230376151711744 keys to test, so in the column labelled '50%', there will be the estimated time taken to test 144115188075855872 keys. In the column labelled 'Av Time To Decrypt' the average time to decrypt is calculated using the average of 1000 decryptions of a sample block of text, which is kept constant across the ciphers, to give an average of the time required to brute force.
 
-Algorithm | No. Of Keys | Av Time To Decrypt (seconds) | 50% (years) | 90% (years) | 100% (years)
+Algorithm | No. Of Keys | Av Time To Decrypt (seconds) | 50% keys tested (years) | 90% keys tested (years) | 100% keys tested (years)
  :---:|:---:|:---:|:---:|:---:|:---:
-**Caesar** | 25 | 0.15515875816345215 | N/A | N/A | N/A
-**DES** | 2^58 | 24.41735816001892 | N/A | N/A | N/A
-**3DES-2KEY** | 2^112 | 74.09152507781982 | N/A | N/A | N/A
-**3DES-3KEY** | 2^168 | 72.97424387931824 | N/A | N/A | N/A th
-**AES-128** | 2^128 | 52.747599840164185 | N/A | N/A | N/A
-**AES-192** | 2^192 | 62.59677004814148 | N/A | N/A | N/A
-**AES-256** | 2^256 | 74.68215489387512 | N/A | N/A | N/A
-**RSA-1024** | 3.778 * 10^151 | N/A | N/A | N/A | N/A
+**Caesar** | 25 | 0.15515875816345215 | 0.0000005 | 0.0000009 | 0.000001
+**DES** | 2<sup>56</sup> | 24.41735816001892 | 27,876,899,412 | 50,178,418,942 | 55,753,798,824
+**3DES-2KEY** | 2<sup>112</sup> | 74.09152507781982 | 6.095 * 10<sup>27</sup> | 1.097 * 10<sup>28</sup> | 1.219 * 10<sup>28</sup>
+**3DES-3KEY** | 2<sup>168</sup> | 72.97424387931824 | 4.326 * 10<sup>44</sup> | 7.787 * 10<sup>44</sup> | 8.652 * 10<sup>44</sup>
+**AES-128** | 2<sup>128</sup> | 52.747599840164185 | 2.844 * 10<sup>32</sup> | 5.119 * 10<sup>32</sup> | 5.688 * 10<sup>32</sup>
+**AES-192** | 2<sup>192</sup> | 62.59677004814148 | 6.226 * 10<sup>51</sup> | 1.121 * 10<sup>52</sup> | 1.245 * 10<sup>52</sup>
+**AES-256** | 2<sup>256</sup>  | 74.68215489387512 | 1.370 * 10<sup>71</sup> | 2.466 * 10<sup>71</sup> | 2.740 * 10<sup>71</sup>
+**RSA-1024** | 3.778 * 10<sup>151</sup> | N/A | N/A | N/A | N/A
 **RSA-2048** | N/A | N/A | N/A | N/A | N/A
 **ECC** | N/A | N/A | N/A | N/A | N/A
 
