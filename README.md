@@ -43,7 +43,7 @@ Algorithm | Symmetry | Completed | ID | Key Format | Key Length (bits : hex char
 **DES** | Symmetric |  <ul><li>- [X] </li></ul> | 2 | Hexadecimal | 64 : 16
 **3DES** | Symmetric |  <ul><li>- [X] </li></ul> | 3 | Hexadecimal | 128 : 32 or 192 : 48
 **AES** | Symmetric |  <ul><li>- [X] </li></ul> | 4 | Hexadecimal | 128 : 32 or 192 : 48 or 256 : 64
-**RSA** | Asymmetric |  <ul><li>- [X] </li></ul> | 5 | Hexadecimal Text File | 1024 : 256 or 2048 : 512
+**RSA** | Asymmetric |  <ul><li>- [X] </li></ul> | 5 | Filepath to Hexadecimal Text File | 1024 : 256 or 2048 : 512
 **ECC** | Asymmetric |  <ul><li>- [ ] </li></ul> | 6 | N/A | N/A
 
 ### Estimation of Time to Brute-Force
