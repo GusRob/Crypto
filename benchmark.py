@@ -1,8 +1,9 @@
 import sys
 import time
-import aes
-import des
-import rsa
+import Algorithms.aes as aes
+import Algorithms.des as des
+import Algorithms.rsa as rsa
+import Algorithms.ecc as ecc
 
 example = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sapien turpis, tristique non ante a, venenatis dictum risus. In sed placerat quam. Vestibulum rutrum semper nibh. Cras pellentesque feugiat pellentesque. Morbi pharetra elit turpis, id aliquam nunc consequat eget. Fusce interdum eros ante, sed facilisis velit consequat vitae. Praesent mattis, ex eget malesuada accumsan, ipsum enim ornare ex, sit amet venenatis elit dolor malesuada justo. Donec sit amet tincidunt ex. In vitae elit volutpat odio."
 key = "1234567890ABCDEF"

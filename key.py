@@ -1,8 +1,8 @@
 import sys
 import secrets
 import random
-import rsa
-import ecc
+import Algorithms.rsa as rsa
+import Algorithms.ecc as ecc
 
 
 def writeFile(filename, input):

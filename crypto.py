@@ -3,10 +3,10 @@ import re
 import math
 import time
 
-import des #custom Library
-import aes #custom Library
-import rsa #custom Library
-import ecc #custom Library
+import Algorithms.aes as aes
+import Algorithms.des as des
+import Algorithms.rsa as rsa
+import Algorithms.ecc as ecc
 
 def encryptCaesar(input, keyIn, isEncrypt):
     output = ""
