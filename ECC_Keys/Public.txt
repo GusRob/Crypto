@@ -1,1 +1,1 @@
-Public Key: AAAAAAAA
+Public Key: ('AAAAAAAA', 'ZZZZZZZZ')
